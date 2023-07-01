@@ -10,12 +10,12 @@
                 <span class="pr-2">Note Saved!</span>
             </div>
             <div class="sidebar-content">
-                <a v-for="note in savedNotes" :key="note.date" class="mb-2 block hover:bg-gray-100 cursor-pointer">{{new Date(note.date).toLocaleString()}}</a>
+                <a  @click="showNote(note)" v-for="note in savedNotes" :key="note.date" class="mb-2 block hover:bg-gray-100 cursor-pointer">{{new Date(note.date).toLocaleString()}}</a>
             </div>
 
         </div>
         <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-auto">
-            <Tiptap @note-content="grabHTML"/>
+            <Tiptap @note-content="grabHTML" :shown-note="shownNote.value" />
             <div class="flex-grow"></div>
             <button @click="store" class="absolute bottom-2 right-0 mr-4 text-white rounded-full bg-green-500 outline-none hover:scale-110 disabled:bg-gray-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-20 h-20 p-2">
@@ -97,6 +97,12 @@ async function grabNotes(){
             resolve(e.target.result);
         }
     });
+}
+
+const shownNote = ref({note: '<p> Start Typing Here... </p>'});
+
+function showNote(note){
+    shownNote.value = note;
 }
 
 //grab notes here
