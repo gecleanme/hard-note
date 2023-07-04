@@ -1,55 +1,78 @@
 <template>
-    <editor-content :editor="editor" />
+    <editor-content :editor="editor"  />
 </template>
 
 <script setup>
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import {onMounted} from "vue";
+import Placeholder from '@tiptap/extension-placeholder'
+import { watch } from 'vue';
+import {watchEffect} from "vue";
 
 const emit = defineEmits(['noteContent']);
 
 const props = defineProps({
-    shownNote: Object
+    shownNote: Object,
+    clearNote:Boolean
 })
 
 
-import { watch } from 'vue';
 
-
-let editor;
-
-editor = useEditor({
+const editor =useEditor({
     extensions: [
         StarterKit,
+        Placeholder.configure({
+            // Use a placeholder:
+            placeholder: 'Write something …',
+        })
     ],
     editorProps: {
         attributes: {
             class: 'overflow-auto focus:outline-none'
         }
     },
+    onUpdate({ editor }) {
+        emit('noteContent', editor.getHTML());
+    },
 
-    // content: props.shownNote.note ?props.shownNote.note : '<p>Start Typing</p>',
-    content: '<p>Start Typing</p>'
+    onCreate({editor}) {
+        editor.commands.focus()
+
+    },
+
+    content:"",
 });
 
-onMounted(()=>{
-    // watch(props.shownNote, (newVal) => {
-    //     if (newVal && newVal.note) {
-    //         editor.commands.setContent(newVal.note);
-    //     } else {
-    //         editor.commands.setContent ('<p>Start Typing</p>');
-    //     }
-    // }, { immediate: true });
 
-    // the whole thing is busted but this is my wip code
-    // i will leave the keyboard / mouse now
 
-    // setInterval(() => {
-    //     emit('noteContent', editor.value.getHTML());
-    // }, 1000);
 
-})
+watch(()=>props.shownNote,(newVal)=>{
+    if (newVal && newVal.note) {
+        editor.value.commands.setContent(newVal.note);
+    }
+
+});
+
+
+
+watchEffect(()=> {
+    if (props.clearNote) {
+        editor.value.commands.clearContent();
+
+    }
+});
+
+
 
 
 </script>
+
+<style>
+.ProseMirror p.is-editor-empty:first-child::before {
+    color: #adb5bd;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+}
+</style>
