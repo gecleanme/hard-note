@@ -10,7 +10,7 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="sidebar-content">
+    <div class="sidebar-content overflow-y-scroll">
         <div class="flex justify-between m-2 p-2">
             <button class="text-gray-bg-gray-500 p-2">All
                 Notes
@@ -24,7 +24,7 @@ const props = defineProps({
 
             </button>
         </div>
-        <div class="flex justify-center items-center flex-col space-x-4 lg:overflow-y-scroll">
+        <div class="flex justify-center items-center flex-col space-x-4">
             <a
                     @click="showNote(note)"
                     v-for="note in savedNotes"
