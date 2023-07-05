@@ -1,12 +1,19 @@
 <script setup>
 
+import {computed} from "vue";
+
 const props = defineProps({
     newNote: Function,
     showNote: Function,
     savedNotes: Array,
     selectedNote: Object
-})
+});
 
+const formattedNotes = computed(() => {
+    return props.savedNotes.map(note => ({
+        ...note, formattedDate: new Date(note.date).toLocaleString()
+    }))
+})
 </script>
 
 <template>
@@ -26,12 +33,13 @@ const props = defineProps({
         </div>
         <div class="flex justify-center items-center flex-col space-x-4">
             <a
-                    @click="showNote(note)"
-                    v-for="note in savedNotes"
-                    :key="note.date"
-                    class="p-2 mb-3 block hover:bg-gray-100 cursor-pointer "
-                    :class="{'bg-gray-100': selectedNote === note}">
-                {{ new Date(note.date).toLocaleString() }}
+                @click="showNote(note)"
+                v-for="note in formattedNotes"
+                :key="note.date"
+                class="p-2 mb-3 block hover:bg-gray-100 cursor-pointer"
+                :class="{'bg-gray-100': selectedNote === note}"
+            >
+                {{ note.formattedDate }}
             </a>
         </div>
     </div>
