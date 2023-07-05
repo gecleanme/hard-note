@@ -33,7 +33,7 @@
 
 <script setup>
 
-import {onlineStatus} from '@/composibles/useonlineStatus.js';
+import {onlineStatus} from '@/composibles/useOnlineStatus.js';
 
 const {clientOffline, showOnline} = onlineStatus();
 
