@@ -1,73 +1,17 @@
 <template>
+
+    <Blinkr message="Success" type="success" v-if="showSuccess"></Blinkr>
+
     <div class="flex w-screen h-screen">
 
-        <div class="sidebar-container py-4 w-1/4 border-r-2 border-gray-300 flex flex-col flex-shrink-0 bg-gray-200">
-            <div v-if="showSuccess"
-                 class="success-msg flex space-x-2 text-white bg-green-500 rounded-full p-2 z-10 mb-2 bg-opacity-80">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                     stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
-                </svg>
+        <div class="py-4 w-1/4 border-r-2 border-gray-300 flex flex-col flex-shrink-0 bg-gray-200">
 
-                <span class="pr-2">Success!</span>
-            </div>
-            <div class="sidebar-content">
-                <div class="flex  justify-between m-2 p-2">
-                    <button @click="allNotes" class="text-gray-bg-gray-500 p-2 hover:bg-gray-100 cursor-pointer">All
-                        Notes
-                    </button>
-                    <button @click="newNote">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-
-                    </button>
-                </div>
-                <div class="flex justify-center items-center flex-col space-x-4 lg:overflow-y-scroll">
-                    <a
-                            @click="showNote(note)"
-                            v-for="note in savedNotes"
-                            :key="note.date"
-                            class="p-2 mb-3 block hover:bg-gray-100 cursor-pointer "
-                            :class="{'bg-gray-100': selectedNote === note}">
-                        {{ new Date(note.date).toLocaleString() }}
-                    </a>
-                </div>
-            </div>
-
-        </div>
-        <div v-if="clientOffline"
-             class="offline-notice bg-red-500 opacity-80 text-center text-white w-1/4 h-[10%] z-10 absolute mb-2 flex items-center space-x-2 p-2">
-
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" class="ml-2 w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
-            </svg>
-
-
-            <span>Unable to sync, looks like you are currently offline </span>
-
-
+            <Sidebar :new-note="newNote" :saved-notes="savedNotes" :selected-note="selectedNote"
+                     :show-note="showNote"></Sidebar>
         </div>
 
-        <div v-if="!clientOffline && showOnline"
-             class="offline-notice bg-green-500 opacity-80 text-center text-white w-1/4 h-[10%] z-10 absolute mb-2 flex items-center space-x-2 p-2">
 
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                 stroke="currentColor" class="ml-2 w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
-            </svg>
-
-
-            <span>Back online! </span>
-
-
-        </div>
-
+        <OnlineStatus></OnlineStatus>
 
         <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-auto">
 
@@ -99,6 +43,7 @@
 
         </article>
 
+
     </div>
 
 
@@ -108,6 +53,9 @@
 
 import Tiptap from "@/components/Tiptap.vue";
 import {onMounted, ref, watch, watchEffect} from "vue";
+import Blinkr from "@/components/Blinkr.vue";
+import OnlineStatus from "@/components/onlineStatus.vue";
+import Sidebar from "@/components/Sidebar.vue";
 
 const db = ref(null);
 const showSuccess = ref(false);
@@ -115,25 +63,7 @@ const noteContent = ref(null);
 const savedNotes = ref([]);
 const selectedNote = ref({})
 const clearContent = ref(false);
-const clientOffline = ref(!navigator.onLine);
-const showOnline = ref(false);
 const shownNote = ref({note: null});
-
-
-window.addEventListener('online', () => {
-        clientOffline.value = false;
-        showOnline.value = true;
-        setTimeout(() => {
-            showOnline.value = false;
-        }, 4000);
-
-    }
-);
-
-window.addEventListener('offline', () => {
-        clientOffline.value = true;
-    }
-);
 
 
 const grabHTML = (html) => {
@@ -236,20 +166,6 @@ function showNote(note) {
     selectedNote.value = note;
 }
 
-function allNotes() {
-
-    // cleanup
-    clearContent.value = true
-
-    selectedNote.value = {};
-
-    setTimeout(() => {
-        clearContent.value = false;
-
-    }, 500)
-
-}
-
 function newNote() {
     return new Promise((resolve, reject) => {
         let op = db.value.transaction('hardnote', 'readwrite');
@@ -273,17 +189,6 @@ function newNote() {
 
     })
 }
-
-// check if note is saved
-
-// const inSaved = () => {
-//
-//  return  Object.keys(selectedNote).some(note =>
-//         savedNotes.value.some(obj => obj.hasOwnProperty(note) && obj[note])
-//     );
-// }
-
-//delete note here
 
 async function deleteNote() {
     return new Promise((resolve, reject) => {
@@ -322,7 +227,6 @@ async function deleteNote() {
                     }, 500)
 
                     resolve();
-                    //window.location.reload();
 
                     showSuccess.value = true;
                     setTimeout(() => {
@@ -355,12 +259,4 @@ onMounted(async () => {
     savedNotes.value = notes.reverse();
 
 });
-// watchEffect(() => {
-// disableSave.value = !noteContent.value;
-//
-// });
 </script>
-
-<style>
-
-</style>

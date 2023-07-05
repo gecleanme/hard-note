@@ -1,24 +1,23 @@
 <template>
-    <editor-content :editor="editor"  />
+    <editor-content :editor="editor"/>
 </template>
 
 <script setup>
-import { useEditor, EditorContent } from '@tiptap/vue-3'
+import {useEditor, EditorContent} from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
-import { watch } from 'vue';
+import {watch} from 'vue';
 import {watchEffect} from "vue";
 
 const emit = defineEmits(['noteContent']);
 
 const props = defineProps({
     shownNote: Object,
-    clearNote:Boolean
+    clearNote: Boolean
 })
 
 
-
-const editor =useEditor({
+const editor = useEditor({
     extensions: [
         StarterKit,
         Placeholder.configure({
@@ -31,7 +30,7 @@ const editor =useEditor({
             class: 'overflow-auto focus:outline-none'
         }
     },
-    onUpdate({ editor }) {
+    onUpdate({editor}) {
         emit('noteContent', editor.getHTML());
     },
 
@@ -40,13 +39,11 @@ const editor =useEditor({
 
     },
 
-    content:"",
+    content: "",
 });
 
 
-
-
-watch(()=>props.shownNote,(newVal)=>{
+watch(() => props.shownNote, (newVal) => {
     if (newVal && newVal.note) {
         editor.value.commands.setContent(newVal.note);
     }
@@ -54,15 +51,12 @@ watch(()=>props.shownNote,(newVal)=>{
 });
 
 
-
-watchEffect(()=> {
+watchEffect(() => {
     if (props.clearNote) {
         editor.value.commands.clearContent();
 
     }
 });
-
-
 
 
 </script>
