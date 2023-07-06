@@ -35,7 +35,7 @@
                 </button>
             </div>
 
-            <div class="z-20 text-gray-300 p-2 m-2 absolute bottom-0">Notes are Auto-saved</div>
+            <div class="z-20 text-gray-400 p-2 m-2 absolute bottom-0">Notes are Auto-saved</div>
 
 
         </article>
