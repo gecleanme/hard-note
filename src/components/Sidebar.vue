@@ -37,7 +37,7 @@ const formattedNotes = computed(() => {
                 v-for="note in formattedNotes"
                 :key="note.date"
                 class="p-2 mb-3 block hover:bg-gray-100 cursor-pointer"
-                :class="{'bg-gray-100': selectedNote === note}"
+                :class="{'bg-gray-100': selectedNote.date === note.date}"
             >
                 {{ note.formattedDate }}
             </a>

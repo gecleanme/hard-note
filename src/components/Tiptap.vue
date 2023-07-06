@@ -22,7 +22,7 @@ const editor = useEditor({
         StarterKit,
         Placeholder.configure({
             // Use a placeholder:
-            placeholder: 'Write something in Markdown',
+            placeholder: 'Type to create a note or choose from saved',
         })
     ],
     editorProps: {

@@ -23,7 +23,7 @@
             <div class="flex-grow"></div>
             <div class="btns absolute bottom-2 right-2 flex space-x-4">
 
-                <button :disabled="!Object.keys(selectedNote).length" @click="deleteNote"
+                <button v-if="Object.keys(selectedNote).length" @click="deleteNote"
                         class="text-white rounded-full bg-red-500 outline-none hover:scale-110">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor" class="w-16 h-16 p-2">
@@ -34,6 +34,8 @@
 
                 </button>
             </div>
+
+            <div class="z-20 text-gray-300 p-2 m-2 absolute bottom-0">Notes are Auto-saved</div>
 
 
         </article>
@@ -60,7 +62,7 @@ const savedNotes = ref([]);
 const selectedNote = ref({})
 const clearContent = ref(false);
 const shownNote = ref({note: null});
-const debounceStore = debounce(store,5000);
+const debounceStore = debounce(store,1000);
 const saveSuccess = ref(false);
 
 
@@ -116,10 +118,18 @@ async function store() {
                     showNote(currentNote);
 
                     resolve();
-                    showSuccess.value = true;
+
+                    saveSuccess.value = true;
+                    setTimeout(() => {
+                        saveSuccess.value = false;
+                        showSuccess.value = true;
+
+                    }, 1000)
+
                     setTimeout(() => {
                         showSuccess.value = false;
-                    }, 4000)
+                    }, 1500)
+
                 };
                 updateNote.onerror = e => {
                     reject('updating error');
@@ -131,10 +141,18 @@ async function store() {
                     savedNotes.value.unshift(currentNote);
                     selectedNote.value = currentNote;
                     resolve();
-                    showSuccess.value = true;
+
+                    saveSuccess.value = true;
+                    setTimeout(() => {
+                        saveSuccess.value = false;
+                        showSuccess.value = true;
+
+                    }, 1000)
+
                     setTimeout(() => {
                         showSuccess.value = false;
-                    }, 4000)
+                    }, 1500)
+
                 };
                 addNote.onerror = e => {
                     reject('adding error');
@@ -215,21 +233,14 @@ async function deleteNote() {
                         savedNotes.value.splice(noteIndex, 1);
                     }
 
-                    clearContent.value = true
-
-                    selectedNote.value = {};
-
-                    setTimeout(() => {
-                        clearContent.value = false;
-
-                    }, 500)
-
                     resolve();
 
                     showSuccess.value = true;
                     setTimeout(() => {
                         showSuccess.value = false;
                     }, 4000)
+
+                    showNote(savedNotes.value[0]);
                 };
 
                 deleteNote.onerror = e => {
@@ -252,11 +263,6 @@ watchEffect(() => {
 watch(noteContent, (newVal) => {
     if (newVal){
         debounceStore();
-
-        saveSuccess.value = false;
-        setTimeout(() => {
-            saveSuccess.value = true;
-        }, 4000)
     }
 })
 
