@@ -2,6 +2,10 @@
 
     <Blinkr message="Success" type="success" v-if="showSuccess"></Blinkr>
 
+    <Blinkr message="Saving..." type="info" v-if="saveSuccess"></Blinkr>
+
+
+
     <div class="flex w-screen h-screen overflow-y-hidden">
 
         <div class="py-4 w-1/4 border-r-2 border-gray-300 flex flex-col flex-shrink-0 bg-gray-200">
@@ -18,18 +22,8 @@
             <Tiptap @note-content="grabHTML" :shown-note="shownNote" :clear-note="clearContent"/>
             <div class="flex-grow"></div>
             <div class="btns absolute bottom-2 right-2 flex space-x-4">
-                <button @click="store" :disabled="!noteContent"
-                        class="mr-4 text-white rounded-full bg-green-500 outline-none hover:scale-110 disabled:bg-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 p-2" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
-                        <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
-                        <path d="M14 4l0 4l-6 0l0 -4" />
-                    </svg>
 
-                </button>
-
-                <button v-if="Object.keys(selectedNote).length" @click="deleteNote"
+                <button :disabled="!Object.keys(selectedNote).length" @click="deleteNote"
                         class="text-white rounded-full bg-red-500 outline-none hover:scale-110">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor" class="w-16 h-16 p-2">
@@ -57,6 +51,7 @@ import {onMounted, ref, watch, watchEffect} from "vue";
 import Blinkr from "@/components/Blinkr.vue";
 import OnlineStatus from "@/components/onlineStatus.vue";
 import Sidebar from "@/components/Sidebar.vue";
+import {debounce} from "lodash";
 
 const db = ref(null);
 const showSuccess = ref(false);
@@ -65,6 +60,8 @@ const savedNotes = ref([]);
 const selectedNote = ref({})
 const clearContent = ref(false);
 const shownNote = ref({note: null});
+const debounceStore = debounce(store,5000);
+const saveSuccess = ref(false);
 
 
 const grabHTML = (html) => {
@@ -250,6 +247,17 @@ async function deleteNote() {
 watchEffect(() => {
     if (noteContent.value === '<p></p>')
         noteContent.value = null;
+})
+
+watch(noteContent, (newVal) => {
+    if (newVal){
+        debounceStore();
+
+        saveSuccess.value = false;
+        setTimeout(() => {
+            saveSuccess.value = true;
+        }, 4000)
+    }
 })
 
 
