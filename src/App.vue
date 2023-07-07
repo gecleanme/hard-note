@@ -17,7 +17,7 @@
 
         <OnlineStatus></OnlineStatus>
 
-        <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-visible">
+        <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-y-auto">
 
             <Tiptap @note-content="grabHTML" :shown-note="shownNote" :clear-note="clearContent"/>
             <div class="flex-grow"></div>
