@@ -17,11 +17,11 @@
 
         <OnlineStatus></OnlineStatus>
 
-        <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-auto">
+        <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-visible">
 
             <Tiptap @note-content="grabHTML" :shown-note="shownNote" :clear-note="clearContent"/>
             <div class="flex-grow"></div>
-            <div class="btns absolute bottom-2 right-2 flex space-x-4">
+            <div class="btns absolute bottom-9 right-2 flex space-x-4">
 
                 <button v-if="Object.keys(selectedNote).length" @click="deleteNote"
                         class="text-white rounded-full bg-red-500 outline-none hover:scale-110">
@@ -35,7 +35,7 @@
                 </button>
             </div>
 
-            <div class="z-20 text-gray-400 p-2 m-2 absolute bottom-0">Notes are Auto-saved</div>
+            <div class="block z-20 text-gray-400 p-2 mt-6 absolute bottom-0 right-0 text-sm">Notes are Auto-saved</div>
 
 
         </article>
