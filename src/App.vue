@@ -23,7 +23,7 @@
             <div class="flex-grow"></div>
             <div class="btns absolute bottom-9 right-2 flex space-x-4">
 
-                <button v-if="Object.keys(selectedNote).length" @click="deleteNote"
+                <button v-if="Object.keys(selectedNote).length" @click="showConfirmDialog"
                         class="text-white rounded-full bg-red-500 outline-none hover:scale-110">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor" class="w-16 h-16 p-2">
@@ -43,6 +43,16 @@
 
     </div>
 
+    <SimplerConfirm
+        :isOpen="isDialogOpen"
+        title="Really Delete?"
+        message="Once done, there's no going back!"
+        :onConfirm="deleteNote"
+        :onClose="handleCancel"
+        yesText="Shred away!"
+        noText="Keep Note"
+    />
+
 
 </template>
 
@@ -53,6 +63,7 @@ import {onMounted, ref, watch, watchEffect} from "vue";
 import Blinkr from "@/components/Blinkr.vue";
 import OnlineStatus from "@/components/onlineStatus.vue";
 import Sidebar from "@/components/Sidebar.vue";
+import SimplerConfirm from "@/components/SimplerConfirm.vue";
 import {debounce} from "lodash";
 
 const db = ref(null);
@@ -64,6 +75,17 @@ const clearContent = ref(false);
 const shownNote = ref({note: null});
 const debounceStore = debounce(store,1000);
 const saveSuccess = ref(false);
+const isDialogOpen = ref(false);
+
+const showConfirmDialog = () => {
+    isDialogOpen.value = true;
+};
+
+const handleCancel = () => {
+    isDialogOpen.value = false;
+};
+
+
 
 
 const grabHTML = (html) => {
@@ -234,7 +256,7 @@ async function deleteNote() {
                     }
 
                     resolve();
-
+                    isDialogOpen.value=false;
                     showSuccess.value = true;
                     setTimeout(() => {
                         showSuccess.value = false;
