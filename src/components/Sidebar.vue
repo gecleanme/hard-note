@@ -11,7 +11,13 @@ const props = defineProps({
 
 const formattedNotes = computed(() => {
     return props.savedNotes.map(note => ({
-        ...note, formattedDate: new Date(note.date).toLocaleString()
+        ...note, formattedDate: new Date(note.date).toLocaleString('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+        })
     }))
 })
 </script>

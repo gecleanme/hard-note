@@ -8,16 +8,21 @@
 
     <div class="flex w-screen h-screen overflow-y-hidden">
 
-        <div class="py-4 w-1/4 border-r-2 border-gray-300 flex flex-col flex-shrink-0 bg-gray-200">
+        <div class="py-4 border-r-2 border-gray-300 bg-gray-200 flex flex-col flex-shrink-0  md:w-1/4"
+             :class="{'w-1/3' : sidebarShown, 'md:w-1/4':sidebarShown, 'hidden': !sidebarShown }"
+        >
 
             <Sidebar :new-note="newNote" :saved-notes="savedNotes" :selected-note="selectedNote"
-                     :show-note="showNote"></Sidebar>
+                     :show-note="showNote">
+
+            </Sidebar>
+
         </div>
 
 
         <OnlineStatus></OnlineStatus>
 
-        <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-y-auto">
+        <article class="ml-4 prose lg:prose-xl w-3/4 flex overflow-y-auto text-clip break-all">
 
             <Tiptap @note-content="grabHTML" :shown-note="shownNote" :clear-note="clearContent"/>
             <div class="flex-grow"></div>
@@ -33,9 +38,24 @@
 
 
                 </button>
+
+            <!--       toggle sidebar          -->
+
+                <button
+                    class="text-white rounded-full bg-green-500 outline-none hover:scale-110"
+                    @click="sidebarShown = !sidebarShown"
+                >
+
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 p-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+
+                </button>
+
+
             </div>
 
-            <div class="block z-20 text-gray-400 p-2 mt-6 absolute bottom-0 right-0 text-sm">Notes are Auto-saved</div>
+            <div class="z-20 text-gray-400 p-2 absolute bottom-0 right-0 text-sm">Notes are Auto-saved</div>
 
 
         </article>
@@ -76,6 +96,7 @@ const shownNote = ref({note: null});
 const debounceStore = debounce(store,1000);
 const saveSuccess = ref(false);
 const isDialogOpen = ref(false);
+const sidebarShown = ref(true);
 
 const showConfirmDialog = () => {
     isDialogOpen.value = true;
@@ -277,8 +298,8 @@ async function deleteNote() {
 }
 
 
-watchEffect(() => {
-    if (noteContent.value === '<p></p>')
+watch(noteContent,(newVal) => {
+    if (newVal === '<p></p>')
         noteContent.value = null;
 })
 

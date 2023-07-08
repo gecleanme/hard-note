@@ -27,7 +27,7 @@ const editor = useEditor({
     ],
     editorProps: {
         attributes: {
-            class: 'overflow-auto focus:outline-none'
+            class: 'overflow-y-auto break-all text-clip focus:outline-none w-full'
         }
     },
     onUpdate({editor}) {
@@ -51,8 +51,8 @@ watch(() => props.shownNote, (newVal) => {
 });
 
 
-watchEffect(() => {
-    if (props.clearNote) {
+watch(()=> props.clearNote,(newVal) => {
+    if (newVal) {
         editor.value.commands.clearContent();
 
     }
