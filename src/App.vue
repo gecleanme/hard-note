@@ -79,7 +79,7 @@
 <script setup>
 
 import Tiptap from "@/components/Tiptap.vue";
-import {onMounted, ref, watch, watchEffect} from "vue";
+import {onMounted, ref, watch} from "vue";
 import Blinkr from "@/components/Blinkr.vue";
 import OnlineStatus from "@/components/onlineStatus.vue";
 import Sidebar from "@/components/Sidebar.vue";
@@ -105,9 +105,6 @@ const showConfirmDialog = () => {
 const handleCancel = () => {
     isDialogOpen.value = false;
 };
-
-
-
 
 const grabHTML = (html) => {
     noteContent.value = html;
