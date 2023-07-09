@@ -1,20 +1,22 @@
 <template>
-    <editor-content :editor="editor"/>
+    <div v-if="currentNote">
+        <editor-content :editor="editor"/>
+    </div>
+    <div v-else>
+        <h1 class="py-8">No Notes</h1>
+    </div>
 </template>
 
 <script setup>
 import {useEditor, EditorContent} from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
-import {watch} from 'vue';
-import {watchEffect} from "vue";
+import {watch, watchEffect} from 'vue';
 
 const emit = defineEmits(['noteContent']);
 
-const props = defineProps({
-    shownNote: Object,
-    clearNote: Boolean
-})
+import useNotes from '@/composables/useNotes';
+const { currentNote, storeNote } = useNotes();
 
 
 const editor = useEditor({
@@ -32,30 +34,26 @@ const editor = useEditor({
     },
     onUpdate({editor}) {
         emit('noteContent', editor.getHTML());
+        storeNote(editor.getHTML(), currentNote.value.date);
     },
 
     onCreate({editor}) {
         editor.commands.focus()
-
+        editor.content = currentNote?.value?.note ?? '';
     },
 
-    content: "",
+    content: currentNote?.value?.note ?? '',
 });
 
-
-watch(() => props.shownNote, (newVal) => {
-    if (newVal && newVal.note) {
-        editor.value.commands.setContent(newVal.note);
+// Update the editor when the note changes.
+watch(currentNote, (newVal) => {
+    if (newVal?.note){
+        editor.value.commands.setContent(newVal.note, false);
+    } else {
+        editor.value.commands.setContent('', false);
     }
 
-});
-
-
-watch(()=> props.clearNote,(newVal) => {
-    if (newVal) {
-        editor.value.commands.clearContent();
-
-    }
+    editor.value.commands.focus();
 });
 
 
