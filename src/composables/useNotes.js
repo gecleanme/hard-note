@@ -4,6 +4,10 @@ const db = await initDB();
 const notes = ref(await getNotes());
 const currentNote = ref(notes.value?.[0] ?? null);
 
+const showSuccess = ref(false);
+const saveSuccess = ref(false);
+
+
 async function initDB() {
     return new Promise((resolve, reject) => {
         let db = window.indexedDB.open('hardnote', 7);
@@ -45,6 +49,18 @@ async function storeNote(noteContent, date = null) {
                 updateNote.onsuccess = e => {
                     refreshNotes();
                     resolve();
+                    //show feedback
+
+                    saveSuccess.value=true;
+                    setTimeout(()=>{
+                        saveSuccess.value=false
+                    },1000)
+
+                    showSuccess.value=true;
+                    setTimeout(()=>{
+                        showSuccess.value=false
+                    },3000)
+
                 };
                 updateNote.onerror = e => {
                     refreshNotes();
@@ -56,6 +72,18 @@ async function storeNote(noteContent, date = null) {
                 addNote.onsuccess = e => {
                     refreshNotes();
                     resolve();
+                    //show feedback
+
+                    saveSuccess.value=true;
+                    setTimeout(()=>{
+                        saveSuccess.value=false
+                    },1000)
+
+                    showSuccess.value=true;
+                    setTimeout(()=>{
+                        showSuccess.value=false
+                    },3000)
+
                 };
                 addNote.onerror = e => {
                     refreshNotes();
@@ -109,6 +137,13 @@ async function deleteNote(noteId = null) {
                     // we need to set the current note to a fallback.
                     currentNote.value = notes.value[0];
                     resolve();
+
+                    //show feedback
+                    showSuccess.value=true;
+                    setTimeout(()=>{
+                        showSuccess.value=false
+                    },3000)
+
                 };
 
                 deleteNote.onerror = e => {
@@ -173,6 +208,8 @@ export default function() {
         deleteNote,
         currentNote,
         setCurrentNote,
-        isCurrentNote
+        isCurrentNote,
+        showSuccess,
+        saveSuccess
     }
 }

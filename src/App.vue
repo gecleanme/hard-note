@@ -68,10 +68,8 @@ import Sidebar from "@/components/Sidebar.vue";
 import SimplerConfirm from "@/components/SimplerConfirm.vue";
 import useNotes from "@/composables/useNotes";
 
-const { deleteNote, currentNote } = useNotes();
+const { deleteNote, currentNote,showSuccess,saveSuccess } = useNotes();
 
-const showSuccess = ref(false);
-const saveSuccess = ref(false);
 const isDialogOpen = ref(false);
 const sidebarShown = ref(true);
 
