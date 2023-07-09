@@ -1,16 +1,13 @@
 <script setup>
 
 import {computed} from "vue";
+import useNotes from "@/composables/useNotes";
 
-const props = defineProps({
-    newNote: Function,
-    showNote: Function,
-    savedNotes: Array,
-    selectedNote: Object
-});
+const { storeNote, isCurrentNote, setCurrentNote, notes, currentNote } = useNotes();
 
 const formattedNotes = computed(() => {
-    return props.savedNotes.map(note => ({
+    console.log('notes reformatted for sidebar')
+    return notes.value.map(note => ({
         ...note, formattedDate: new Date(note.date).toLocaleString('en-US', {
             year: 'numeric',
             month: '2-digit',
@@ -18,8 +15,9 @@ const formattedNotes = computed(() => {
             hour: '2-digit',
             minute: '2-digit',
         })
-    }))
-})
+    }));
+});
+
 </script>
 
 <template>
@@ -28,7 +26,7 @@ const formattedNotes = computed(() => {
             <button class="text-gray-bg-gray-500 p-2">All
                 Notes
             </button>
-            <button @click="newNote">
+            <button @click="storeNote('', null);">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                      stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -38,13 +36,13 @@ const formattedNotes = computed(() => {
             </button>
         </div>
         <div class="flex justify-center items-center justify-items-center space-x-2"
-             @click="showNote(note)"
+             @click="setCurrentNote(note)"
              v-for="note in formattedNotes"
              :key="note.date"
-             :class="{'bg-gray-200': selectedNote.date === note.date}"
+             :class="{'bg-gray-200': isCurrentNote(note)}"
         >
 
-            <svg v-if="selectedNote.date === note.date" xmlns="http://www.w3.org/2000/svg"
+            <svg v-if="isCurrentNote(note)" xmlns="http://www.w3.org/2000/svg"
                  fill="none" viewBox="0 0 24 24"
                  stroke-width="1.5" stroke="currentColor"
                  class="w-6 h-6"
@@ -60,9 +58,4 @@ const formattedNotes = computed(() => {
             </a>
         </div>
     </div>
-
 </template>
-
-<style scoped>
-
-</style>
