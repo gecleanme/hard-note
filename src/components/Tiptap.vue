@@ -4,6 +4,8 @@
     </div>
     <div v-else>
         <h1 class="py-8">No Notes</h1>
+        <p class="py-8 text-base">Click the + Sign on the left to add one</p>
+
     </div>
 </template>
 
