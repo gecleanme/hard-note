@@ -14,6 +14,10 @@ Vue 3 : Composition API Based, Markdown-enabled Note-taking PWA
 - Easily Extendable
 - Responsive UI
 - Cross-Platform Installable as a PWA
+
+## Preview
+[Preview Here](https://gecleanme.github.io/hard-note-gh-pages/)
+
 ## Project setup
 ```
 npm install
