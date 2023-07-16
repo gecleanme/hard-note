@@ -1,6 +1,6 @@
 <template>
     <div v-if="clientOffline"
-         class="offline-notice bg-red-500 opacity-80 text-center text-white w-1/4 h-[10%] z-10 absolute mb-2 flex items-center space-x-2 p-2">
+         class="offline-notice bg-red-500 opacity-80 text-center text-sm text-white w-2/4 lg:w-1/4 h-[10%] z-10 absolute bottom-32 right-2 mb-2 flex items-center space-x-2 p-2">
 
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
              stroke="currentColor" class="ml-2 w-6 h-6">
@@ -9,13 +9,13 @@
         </svg>
 
 
-        <span>Unable to sync, looks like you are currently offline </span>
+        <span>looks like you are currently offline </span>
 
 
     </div>
 
     <div v-if="!clientOffline && showOnline"
-         class="offline-notice bg-green-500 opacity-80 text-center text-white w-1/4 h-[10%] z-10 absolute mb-2 flex items-center space-x-2 p-2">
+         class="offline-notice bg-green-500 opacity-80 text-center text-white text-sm w-1/4 h-[10%] z-10 absolute bottom-32 right-2 mb-2 flex items-center space-x-2 p-2">
 
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
              stroke="currentColor" class="ml-2 w-6 h-6">

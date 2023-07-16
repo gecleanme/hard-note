@@ -17,7 +17,6 @@ const formattedNotes = computed(() => {
         })
     }));
 });
-
 </script>
 
 <template>
@@ -25,14 +24,6 @@ const formattedNotes = computed(() => {
         <div class="flex justify-between m-2 p-2">
             <button class="text-gray-bg-gray-500 p-2">All
                 Notes
-            </button>
-            <button @click="storeNote('', null);">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                     stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-
             </button>
         </div>
         <div class="flex justify-center items-center justify-items-center space-x-2"
@@ -57,5 +48,12 @@ const formattedNotes = computed(() => {
                 {{ note.formattedDate }}
             </a>
         </div>
+
+        <div v-if="!Object.keys(formattedNotes).length"
+             class="justify-center text-center text-black text-md"
+        >
+            No Notes to show
+        </div>
+
     </div>
 </template>

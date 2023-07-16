@@ -7,7 +7,7 @@
     <div class="flex w-screen h-screen overflow-y-hidden">
 
         <div class="py-4 border-r-2 border-gray-300 bg-gray-200 flex flex-col flex-shrink-0  md:w-1/4"
-             :class="{'w-1/3' : sidebarShown, 'md:w-1/4':sidebarShown, 'hidden': !sidebarShown }"
+             :class="{'w-[42%]' : sidebarShown, 'md:w-1/4':sidebarShown, 'hidden': !sidebarShown }"
         >
             <Sidebar />
         </div>
@@ -18,10 +18,33 @@
 
             <Tiptap />
             <div class="flex-grow"></div>
-            <div class="btns absolute bottom-9 right-2 flex space-x-4">
+            <div class="btns flex space-x-4">
+
+
+                <!-- New Note -->
+                <button
+                    class="absolute bottom-9 right-2 text-white rounded-full bg-green-500 outline-none hover:scale-110"
+                    @click="storeNote('',null)"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 p-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+
+                </button>
+
+
+                <!-- toggle sidebar -->
+                <button
+                    class="absolute top-2 right-2 text-white rounded-full bg-blue-500 outline-none hover:scale-110"
+                    @click="sidebarShown = !sidebarShown"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 p-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                </button>
 
                 <button v-if="currentNote" @click="showConfirmDialog"
-                        class="text-white rounded-full bg-red-500 outline-none hover:scale-110">
+                        class="absolute bottom-9  right-24 text-white rounded-full bg-red-500 outline-none hover:scale-110">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor" class="w-16 h-16 p-2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -29,15 +52,8 @@
                     </svg>
                 </button>
 
-                <!-- toggle sidebar -->
-                <button
-                    class="text-white rounded-full bg-green-500 outline-none hover:scale-110"
-                    @click="sidebarShown = !sidebarShown"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 p-2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                    </svg>
-                </button>
+
+
             </div>
 
             <div class="z-20 text-gray-400 p-2 absolute bottom-0 right-0 text-sm">Notes are Auto-saved</div>
@@ -68,10 +84,10 @@ import Sidebar from "@/components/Sidebar.vue";
 import SimplerConfirm from "@/components/SimplerConfirm.vue";
 import useNotes from "@/composables/useNotes";
 
-const { deleteNote, currentNote,showSuccess,saveSuccess } = useNotes();
+const { deleteNote, currentNote,showSuccess,saveSuccess, storeNote } = useNotes();
 
 const isDialogOpen = ref(false);
-const sidebarShown = ref(true);
+const sidebarShown = ref(false);
 
 const showConfirmDialog = () => {
     isDialogOpen.value = true;
