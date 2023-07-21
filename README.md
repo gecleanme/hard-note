@@ -10,6 +10,10 @@ Vue 3 : Composition API Based, Markdown-enabled Note-taking PWA
 - [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) Client-side Storage API
 - [heroicons](https://heroicons.com/) for the sweet icons
 
+## Code Formatting/Style Treatment
+
+[Prettier](https://prettier.io/)
+
 ## Features
 
 - Lightweight
