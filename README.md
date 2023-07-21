@@ -21,6 +21,7 @@ Vue 3 : Composition API Based, Markdown-enabled Note-taking PWA
 - Easily Extendable
 - Responsive UI
 - Cross-Platform Installable as a PWA
+- Works offline
 
 ## Preview
 
