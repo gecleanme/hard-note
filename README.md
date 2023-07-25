@@ -6,6 +6,7 @@ Vue 3 : Composition API Based, Markdown-enabled Note-taking PWA
 
 - Vue PWA Plugin
 - TailwindCSS
+- [Lodash](https://lodash.com/)'s debouncer
 - [TipTap](https://tiptap.dev/) WYSIWYG editor
 - [IndexedDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API) Client-side Storage API
 - [heroicons](https://heroicons.com/) for the sweet icons
